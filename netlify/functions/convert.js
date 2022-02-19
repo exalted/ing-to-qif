@@ -22,6 +22,12 @@ const parse5 = require('parse5');
 //   "body": "..."
 // }
 //
+
+// Content-Type: text/csv; charset=utf-8
+// Content-Length: 52323
+// X-Download-Options: noopen
+// Content-Disposition: attachment; filename="bottega-assets-2022_02_19T17_48_41.csv"
+
 exports.handler = async function (event, context) {
   // console.log(`event: ${JSON.stringify(event, null, 2)}`);
   // console.log(`context: ${JSON.stringify(context, null, 2)}`);
@@ -65,6 +71,11 @@ T${x['Importo']
 
   return {
     statusCode: 200,
+    headers: {
+      'Content-Type': 'application/qif; charset=utf-8',
+      // 'Content-Length': 52323,
+      'Content-Disposition': 'attachment; filename="MovimentiContoCorrenteArancio.qif"',
+    },
     body: qif,
   };
 };
