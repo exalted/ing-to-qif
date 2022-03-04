@@ -30,7 +30,7 @@ const parse5 = require('parse5');
 
 exports.handler = async function (event, _context) {
   console.log(`event: ${JSON.stringify(event, null, 2)}`);
-  console.log(`context: ${JSON.stringify(context, null, 2)}`);
+  console.log(`context: ${JSON.stringify(_context, null, 2)}`);
 
   const html = Buffer.from(event.body, 'base64').toString('utf8');
   console.log(`html: ${html}`);
