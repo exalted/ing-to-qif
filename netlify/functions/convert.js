@@ -28,12 +28,31 @@ const parse5 = require('parse5');
 // X-Download-Options: noopen
 // Content-Disposition: attachment; filename="bottega-assets-2022_02_19T17_48_41.csv"
 
-exports.handler = async function (event, context) {
-  // console.log(`event: ${JSON.stringify(event, null, 2)}`);
-  // console.log(`context: ${JSON.stringify(context, null, 2)}`);
+exports.handler = async function (event, _context) {
+  console.log(`event: ${JSON.stringify(event, null, 2)}`);
+  console.log(`context: ${JSON.stringify(context, null, 2)}`);
 
+  const html = Buffer.from(event.body, 'base64').toString('utf8');
+  console.log(`html: ${html}`);
+
+  const qif = convertToQIF(html);
+  console.log(`qif: ${qif}`);
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'application/qif; charset=utf-8',
+      // 'Content-Length': 52323,
+      'Content-Disposition':
+        'attachment; filename="MovimentiContoCorrenteArancio.qif"',
+    },
+    body: qif,
+  };
+};
+
+function convertToQIF(html) {
   const transactions = parse5
-    .parse(Buffer.from(event.body, 'base64').toString('utf8'))
+    .parse(html)
     .childNodes.find((x) => x.tagName === 'html')
     .childNodes.find((x) => x.tagName === 'body')
     .childNodes.find((x) => x.tagName === 'table')
@@ -69,13 +88,7 @@ T${x['Importo']
   .join('')}
 `;
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/qif; charset=utf-8',
-      // 'Content-Length': 52323,
-      'Content-Disposition': 'attachment; filename="MovimentiContoCorrenteArancio.qif"',
-    },
-    body: qif,
-  };
-};
+  return qif;
+}
+
+exports.convertToQIF = convertToQIF;
