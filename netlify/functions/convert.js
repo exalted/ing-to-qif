@@ -75,8 +75,8 @@ ${transactions
   .map(
     (x) => `\
 D${x['Data valuta']}
-P${payeePrefix(x)}${x['Causale']} - ${x['Descrizione operazione']}
-M${x['Causale']} - ${x['Descrizione operazione']}
+P${x['Causale']} - ${x['Descrizione operazione']}
+M${payeePrefix(x)}${x['Causale']} - ${x['Descrizione operazione']}
 T${x['Importo']
       .replace(/[^-+0-9,]/g, '')
       .replace(/,/g, '#')
