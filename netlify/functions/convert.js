@@ -75,7 +75,7 @@ ${transactions
   .map(
     (x) => `\
 D${x['Data valuta']}
-P${x['Causale']} - ${x['Descrizione operazione']}
+P${payeePrefix(x)}${x['Causale']} - ${x['Descrizione operazione']}
 M${x['Causale']} - ${x['Descrizione operazione']}
 T${x['Importo']
       .replace(/[^-+0-9,]/g, '')
@@ -89,6 +89,18 @@ T${x['Importo']
 `;
 
   return qif;
+}
+
+function payeePrefix(transaction) {
+  if (/carta xxxxxxxxxxxx2541/i.test(transaction['Descrizione operazione'])) {
+    return 'Ali - ';
+  }
+
+  if (/carta xxxxxxxxxxxx3198/i.test(transaction['Descrizione operazione'])) {
+    return 'Martina - ';
+  }
+
+  return '';
 }
 
 exports.convertToQIF = convertToQIF;
